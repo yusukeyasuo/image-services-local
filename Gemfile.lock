@@ -1,0 +1,17 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    flickr.rb (1.2.1)
+      xml-simple (>= 1.0.7)
+    mini_magick (4.9.3)
+    xml-simple (1.1.5)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  flickr.rb (~> 1.2, >= 1.2.1)
+  mini_magick
+
+BUNDLED WITH
+   1.16.3
