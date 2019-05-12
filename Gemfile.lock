@@ -1,19 +1,17 @@
 GEM
   remote: https://rubygems.org/
   specs:
-    flickr.rb (1.2.1)
-      xml-simple (>= 1.0.7)
+    flickraw (0.9.10)
     mini_magick (4.9.3)
     mini_portile2 (2.4.0)
     nokogiri (1.10.3)
       mini_portile2 (~> 2.4.0)
-    xml-simple (1.1.5)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
-  flickr.rb (~> 1.2, >= 1.2.1)
+  flickraw
   mini_magick
   nokogiri
 
