@@ -25,7 +25,9 @@ def get_image_urls(url)
                end
 
   image_urls.each do |image_url|
-    download_image(image_url)
+    puts '[start] download_image'
+    puts image_url
+    download_image(image_url.to_s)
   end
 end
 
@@ -38,29 +40,29 @@ def get_mercari_image_urls(doc)
 end
 
 def get_fril_image_urls(doc)
-  puts "[start] get_fril_image_urls"
   image_urls = []
   doc.xpath('//img[@class="sp-image"]/@src').each do |src|
-    puts src
     image_urls << src
   end
   image_urls
 end
 
 def download_image(image_url)
-  File.open('tmp/tmp.jpg', 'wb') do |file|
+  match = image_url.match(/([a-zA-Z0-9]+\.jpg)/)
+  file_name = match[1]
+  File.open("tmp/#{file_name}", 'wb') do |file|
     open(image_url) do |img|
       file.puts img.read
     end
   end
-  resize_to_850
+  resize_to_850(file_name)
 end
 
-def resize_to_850
-  image = MiniMagick::Image.open('tmp/tmp.jpg')
+def resize_to_850(file_name)
+  image = MiniMagick::Image.open("tmp/#{file_name}")
   image.resize '850x850'
   image.format 'jpg'
-  image.write 'tmp/output.jpg'
+  image.write "tmp/resized_#{file_name}"
 end
 
 #item_url = "https://item.mercari.com/jp/m62006909909/?_s=U2FsdGVkX1_IdRU8RQq0HWNkoCWRzLYt1jUnrtVk24Bqb5z5jXS9-e-x6yCRu1pdnbUCAMXmkSi-_c66xs6GSreOo4Azj29kfrGdJDfvo2nLZEKpyE5ElGFRjeWhO4DL"
