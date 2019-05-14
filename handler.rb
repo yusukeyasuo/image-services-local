@@ -4,6 +4,7 @@ require 'mini_magick'
 require 'net/http'
 require 'nokogiri'
 require 'aws-sdk-s3'
+require 'flickraw'
 
 def get_image_urls(url)
   puts "[start] get_image_urls"
@@ -63,6 +64,21 @@ def resize_to_850(file_name)
   image.resize '850x850'
   image.format 'jpg'
   image.write "tmp/resized_#{file_name}"
+  upload_image(file_name)
+end
+
+def upload_image(file_name)
+  FlickRaw.api_key = ENV['FLICKRAW_API_KEY']
+  FlickRaw.shared_secret = ENV['FLICKRAW_SHARED_SECRET']
+
+  flickr = FlickRaw::Flickr.new
+
+  flickr.access_token = ENV['FLICKR_ACCESS_TOKEN']
+  flickr.access_secret = ENV['FLICKR_ACCESS_SECRET']
+
+  test = flickr.upload_photo "tmp/resized_#{file_name}", :title => file_name, :description => file_name
+  puts "===> uploaded ===>"
+  puts test
 end
 
 #item_url = "https://item.mercari.com/jp/m62006909909/?_s=U2FsdGVkX1_IdRU8RQq0HWNkoCWRzLYt1jUnrtVk24Bqb5z5jXS9-e-x6yCRu1pdnbUCAMXmkSi-_c66xs6GSreOo4Azj29kfrGdJDfvo2nLZEKpyE5ElGFRjeWhO4DL"
