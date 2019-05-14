@@ -25,11 +25,13 @@ def get_image_urls(url)
                  []
                end
 
+  uploaded_urls = []
   image_urls.each do |image_url|
     puts '[start] download_image'
     puts image_url
-    download_image(image_url.to_s)
+    uploaded_urls << download_image(image_url.to_s)
   end
+  puts uploaded_urls.join("|")
 end
 
 def get_mercari_image_urls(doc)
@@ -76,11 +78,14 @@ def upload_image(file_name)
   flickr.access_token = ENV['FLICKR_ACCESS_TOKEN']
   flickr.access_secret = ENV['FLICKR_ACCESS_SECRET']
 
-  test = flickr.upload_photo "tmp/resized_#{file_name}", :title => file_name, :description => file_name
-  puts "===> uploaded ===>"
-  puts test
+  photo_id = flickr.upload_photo "tmp/resized_#{file_name}", :title => file_name, :description => file_name
+  get_uploaded_url(flickr, photo_id)
 end
 
-#item_url = "https://item.mercari.com/jp/m62006909909/?_s=U2FsdGVkX1_IdRU8RQq0HWNkoCWRzLYt1jUnrtVk24Bqb5z5jXS9-e-x6yCRu1pdnbUCAMXmkSi-_c66xs6GSreOo4Azj29kfrGdJDfvo2nLZEKpyE5ElGFRjeWhO4DL"
-item_url = "https://item.fril.jp/750029bbf335d74fbc730a285ff36468"
+def get_uploaded_url(flickr, photo_id)
+  flickr.photos.getInfo(photo_id: photo_id)['urls'].first['_content']
+end
+
+item_url = "https://item.mercari.com/jp/m62006909909/?_s=U2FsdGVkX1_IdRU8RQq0HWNkoCWRzLYt1jUnrtVk24Bqb5z5jXS9-e-x6yCRu1pdnbUCAMXmkSi-_c66xs6GSreOo4Azj29kfrGdJDfvo2nLZEKpyE5ElGFRjeWhO4DL"
+#item_url = "https://item.fril.jp/750029bbf335d74fbc730a285ff36468"
 get_image_urls(item_url)
