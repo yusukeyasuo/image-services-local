@@ -51,7 +51,7 @@ def get_fril_image_urls(doc)
 end
 
 def download_image(image_url)
-  match = image_url.match(/([a-zA-Z0-9]+\.jpg)/)
+  match = image_url.match(/([a-zA-Z0-9_]+\.jpg)/)
   file_name = match[1]
   File.open("tmp/#{file_name}", 'wb') do |file|
     open(image_url) do |img|
